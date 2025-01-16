@@ -44,7 +44,10 @@ function Header() {
       sx={{
         transition: 'all 0.3s ease',
         height: scrolled ? '64px' : { xs: '64px', md: '80px' },
-        backgroundColor: scrolled ? 'primary.main' : 'primary.dark',
+        backgroundColor: scrolled 
+          ? 'rgba(66, 165, 245, 0.85)'
+          : 'rgba(25, 118, 210, 0.9)',
+        backdropFilter: 'blur(8px)',
         boxShadow: scrolled ? 3 : 0,
       }}
     >
