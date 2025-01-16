@@ -13,6 +13,8 @@ import { getMovies } from './services/api';
 import { useLikedMovies } from './hooks/useLikedMovies';
 import MovieCard from './components/MovieCard';
 import MovieDetails from './components/MovieDetails';
+import Navigation from './components/Navigation';
+import FavoritesPage from './components/FavoritesPage';
 
 function HomePage({ movies, likedMovies, toggleLike, page, totalPages, searchQuery, handleSearch, handlePageChange, isMobile }) {
   return (
@@ -84,33 +86,46 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route 
-          path="/" 
-          element={
-            <HomePage
-              movies={movies}
-              likedMovies={likedMovies}
-              toggleLike={toggleLike}
-              page={page}
-              totalPages={totalPages}
-              searchQuery={searchQuery}
-              handleSearch={handleSearch}
-              handlePageChange={handlePageChange}
-              isMobile={isMobile}
-            />
-          }
-        />
-        <Route 
-          path="/movie/:id" 
-          element={
-            <MovieDetails
-              likedMovies={likedMovies}
-              onToggleLike={toggleLike}
-            />
-          }
-        />
-      </Routes>
+      <Navigation />
+      <div style={{ paddingTop: "80px" }}>
+        <Routes>
+          <Route 
+            path="/" 
+            element={
+              <HomePage
+                movies={movies}
+                likedMovies={likedMovies}
+                toggleLike={toggleLike}
+                page={page}
+                totalPages={totalPages}
+                searchQuery={searchQuery}
+                handleSearch={handleSearch}
+                handlePageChange={handlePageChange}
+                isMobile={isMobile}
+              />
+            }
+          />
+          <Route 
+            path="/favorites" 
+            element={
+              <FavoritesPage
+                movies={movies}
+                likedMovies={likedMovies}
+                toggleLike={toggleLike}
+              />
+            }
+          />
+          <Route 
+            path="/movie/:id" 
+            element={
+              <MovieDetails
+                likedMovies={likedMovies}
+                onToggleLike={toggleLike}
+              />
+            }
+          />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }

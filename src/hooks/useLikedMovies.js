@@ -8,6 +8,8 @@ export const useLikedMovies = () => {
     return stored ? JSON.parse(stored) : {};
   });
 
+  console.log(likedMovies);
+
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(likedMovies));
   }, [likedMovies]);
