@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
+import MovieIcon from '@mui/icons-material/Movie';
+import Clock from './Clock';
 
 function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -39,96 +41,111 @@ function Header() {
   ];
 
   return (
-    <AppBar 
-      position="fixed" 
-      sx={{
-        transition: 'all 0.3s ease',
-        height: scrolled ? '64px' : { xs: '64px', md: '80px' },
-        backgroundColor: scrolled 
-          ? 'rgba(66, 165, 245, 0.85)'
-          : 'rgba(25, 118, 210, 0.9)',
-        backdropFilter: 'blur(8px)',
-        boxShadow: scrolled ? 3 : 0,
-      }}
-    >
-      <Toolbar sx={{ height: '100%' }}>
-        {isMobile && (
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={() => setIsDrawerOpen(true)}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-        )}
+    <>
+      <AppBar 
+        position="fixed" 
+        sx={{
+          transition: 'all 0.3s ease',
+          height: scrolled ? '64px' : { xs: '64px', md: '80px' },
+          backgroundColor: scrolled 
+            ? 'rgba(66, 165, 245, 0.85)'
+            : 'rgba(25, 118, 210, 0.9)',
+          backdropFilter: 'blur(8px)',
+          boxShadow: scrolled ? 3 : 0,
+        }}
+      >
+        <Toolbar sx={{ height: '100%' }}>
+          {isMobile && (
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={() => setIsDrawerOpen(true)}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
 
-        <Typography
-          variant="h6"
-          component={Link}
-          to="/"
-          sx={{
-            flexGrow: 1,
-            textDecoration: 'none',
-            color: 'inherit',
-            fontSize: scrolled 
-              ? { xs: '1.2rem', md: '1.5rem' }
-              : { xs: '1.5rem', md: '2rem' },
-            transition: 'all 0.3s ease',
-            fontWeight: 'bold',
-          }}
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 1,
+            flexGrow: 1 
+          }}>
+            <MovieIcon sx={{ 
+              fontSize: scrolled 
+                ? { xs: '1.5rem', md: '2rem' }
+                : { xs: '2rem', md: '2.5rem' },
+              transition: 'all 0.3s ease',
+            }} />
+            <Typography
+              variant="h6"
+              component={Link}
+              to="/"
+              sx={{
+                textDecoration: 'none',
+                color: 'inherit',
+                fontSize: scrolled 
+                  ? { xs: '1.2rem', md: '1.5rem' }
+                  : { xs: '1.5rem', md: '2rem' },
+                transition: 'all 0.3s ease',
+                fontWeight: 'bold',
+              }}
+            >
+              Movie App
+            </Typography>
+          </Box>
+
+          {/* Desktop menu */}
+          {!isMobile && (
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              {menuItems.map((item) => (
+                <Typography
+                  key={item.text}
+                  component={Link}
+                  to={item.path}
+                  sx={{
+                    color: 'inherit',
+                    textDecoration: 'none',
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                >
+                  {item.text}
+                </Typography>
+              ))}
+            </Box>
+          )}
+        </Toolbar>
+
+        {/* Mobile drawer */}
+        <Drawer
+          anchor="left"
+          open={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
         >
-          Movie App
-        </Typography>
-
-        {/* Desktop menu */}
-        {!isMobile && (
-          <Box sx={{ display: 'flex', gap: 2 }}>
+          <List sx={{ width: 250 }}>
             {menuItems.map((item) => (
-              <Typography
+              <ListItem 
                 key={item.text}
                 component={Link}
                 to={item.path}
-                sx={{
+                onClick={() => setIsDrawerOpen(false)}
+                sx={{ 
+                  textDecoration: 'none', 
                   color: 'inherit',
-                  textDecoration: 'none',
-                  '&:hover': {
-                    textDecoration: 'underline',
-                  },
                 }}
               >
-                {item.text}
-              </Typography>
+                <ListItemText primary={item.text} />
+              </ListItem>
             ))}
-          </Box>
-        )}
-      </Toolbar>
-
-      {/* Mobile drawer */}
-      <Drawer
-        anchor="left"
-        open={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-      >
-        <List sx={{ width: 250 }}>
-          {menuItems.map((item) => (
-            <ListItem 
-              key={item.text}
-              component={Link}
-              to={item.path}
-              onClick={() => setIsDrawerOpen(false)}
-              sx={{ 
-                textDecoration: 'none', 
-                color: 'inherit',
-              }}
-            >
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    </AppBar>
+          </List>
+        </Drawer>
+      </AppBar>
+      <Clock />
+    </>
   );
 }
 
