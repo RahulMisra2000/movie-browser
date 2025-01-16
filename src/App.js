@@ -13,12 +13,15 @@ import { getMovies } from './services/api';
 import { useLikedMovies } from './hooks/useLikedMovies';
 import MovieCard from './components/MovieCard';
 import MovieDetails from './components/MovieDetails';
-import Navigation from './components/Navigation';
+import Header from './components/Header';
 import FavoritesPage from './components/FavoritesPage';
 
-function HomePage({ movies, likedMovies, toggleLike, page, totalPages, searchQuery, handleSearch, handlePageChange, isMobile }) {
+function HomePage({ movies, likedMovies, toggleLike, page, totalPages, searchQuery, handleSearch, handlePageChange, isMobile, scrolled }) {
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ 
+      py: 4,
+      paddingTop: { xs: '64px', md: scrolled ? '64px' : '80px' }
+    }}>
       <Box sx={{ mb: 4 }}>
         <TextField
           fullWidth
@@ -58,9 +61,20 @@ function App() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const [scrolled, setScrolled] = useState(false);
   const [likedMovies, toggleLike] = useLikedMovies();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -86,46 +100,45 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navigation />
-      <div style={{ paddingTop: "80px" }}>
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              <HomePage
-                movies={movies}
-                likedMovies={likedMovies}
-                toggleLike={toggleLike}
-                page={page}
-                totalPages={totalPages}
-                searchQuery={searchQuery}
-                handleSearch={handleSearch}
-                handlePageChange={handlePageChange}
-                isMobile={isMobile}
-              />
-            }
-          />
-          <Route 
-            path="/favorites" 
-            element={
-              <FavoritesPage
-                movies={movies}
-                likedMovies={likedMovies}
-                toggleLike={toggleLike}
-              />
-            }
-          />
-          <Route 
-            path="/movie/:id" 
-            element={
-              <MovieDetails
-                likedMovies={likedMovies}
-                onToggleLike={toggleLike}
-              />
-            }
-          />
-        </Routes>
-      </div>
+      <Header />
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <HomePage
+              movies={movies}
+              likedMovies={likedMovies}
+              toggleLike={toggleLike}
+              page={page}
+              totalPages={totalPages}
+              searchQuery={searchQuery}
+              handleSearch={handleSearch}
+              handlePageChange={handlePageChange}
+              isMobile={isMobile}
+              scrolled={scrolled}
+            />
+          }
+        />
+        <Route 
+          path="/favorites" 
+          element={
+            <FavoritesPage
+              movies={movies}
+              likedMovies={likedMovies}
+              toggleLike={toggleLike}
+            />
+          }
+        />
+        <Route 
+          path="/movie/:id" 
+          element={
+            <MovieDetails
+              likedMovies={likedMovies}
+              onToggleLike={toggleLike}
+            />
+          }
+        />
+      </Routes>
     </BrowserRouter>
   );
 }
