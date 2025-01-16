@@ -15,6 +15,7 @@ import MovieCard from './components/MovieCard';
 import MovieDetails from './components/MovieDetails';
 import Header from './components/Header';
 import FavoritesPage from './components/FavoritesPage';
+import ScrollToTop from './components/ScrollToTop';
 
 function HomePage({ movies, likedMovies, toggleLike, page, totalPages, searchQuery, handleSearch, handlePageChange, isMobile, scrolled }) {
   return (
@@ -139,6 +140,7 @@ function App() {
           }
         />
       </Routes>
+      <ScrollToTop />
     </BrowserRouter>
   );
 }
