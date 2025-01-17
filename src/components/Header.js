@@ -93,7 +93,7 @@ function Header() {
                 fontWeight: 'bold',
               }}
             >
-              Movie App
+              Movie App (v2.0)
             </Typography>
           </Box>
 
